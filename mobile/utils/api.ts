@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import { useAuth } from "@clerk/clerk-expo";
 
-const API_BASE_URL = "https://x-clone-rn-lime.vercel.app/api";
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL || "https://x-clone-rn-lime.vercel.app/api";
 // localhost api would not work on your actual physical device
 // const API_BASE_URL = "http://localhost:5001/api";
 
@@ -11,7 +12,6 @@ export const createApiClient = (
 ): AxiosInstance => {
   const api = axios.create({ baseURL: API_BASE_URL });
 
-  // add token to every request
   api.interceptors.request.use(async (config) => {
     const token = await getToken();
     if (token) {
@@ -47,7 +47,7 @@ export const postApi = {
     api.delete(`/posts/${postId}`),
 };
 
-export const CommentApi = {
+export const commentApi = {
   createComment: (api: AxiosInstance, postId: string, content: string) =>
-    api.post(`/comments/${postId}`, { content }),
+    api.post(`/comments/post/${postId}`, { content }),
 };
